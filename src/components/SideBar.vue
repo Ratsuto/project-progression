@@ -45,7 +45,7 @@ const sysDate = new Date();
 </script>
 
 <template>
-  <div class="fixed bg-white/90 backdrop-blur-sm w-full h-18 z-10">
+  <div class="fixed bg-white backdrop-blur-sm w-full h-18 z-10">
     <div class="flex items-center justify-between h-full w-full px-6">
       <div class="flex items-center justify-between gap-2">
         <Avatar :image="'../src/assets/images/icons/logo-1.png'" size="large" />
@@ -77,7 +77,7 @@ const sysDate = new Date();
   <aside class="w-64 max-h-screen shadow-md flex flex-col">
     <div class="h-18 bg-transparent"></div>
 
-    <nav class="flex flex-col max-h-full overflow-y-scroll pr-2 py-4 gap-1 h-full bg-white/90 backdrop-blur-md">
+    <nav class="flex flex-col max-h-full overflow-y-scroll pr-2 py-4 gap-1 h-full bg-white backdrop-blur-md">
       <!-- Dashboard -->
       <router-link :to="{ name: 'Dashboard' }" v-slot="{ isActive, isExactActive}">
         <div :class="['flex items-center px-4 gap-4 h-11 w-0 rounded-r-full transition-all duration-300 font-semibold',
