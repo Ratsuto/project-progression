@@ -1,0 +1,52 @@
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+@font-face {
+    font-family: "UbuntuSans";
+    src: url("@/assets/fonts/UbuntuSans-Regular.ttf") format("truetype");
+}
+
+*, html, body {
+    font-family: "UbuntuSans", sans-serif, serif, courier;
+    font-style: normal;
+}
+
+.p-datepicker-panel.p-component {
+    @apply rounded-2xl;
+}
+
+.p-datepicker-input, .p-inputtext, .p-select {
+    @apply w-full h-12 flex items-center;
+}
+
+.card {
+    @apply bg-white rounded-2xl text-gray-700 shadow-sm overflow-hidden;
+}
+
+.card-header {
+    @apply text-xl font-semibold text-[#10b981];
+}
+
+.p-dialog-mask {
+    @apply bg-zinc-800/20 backdrop-blur-sm;
+}
+
+.p-dialog-close-button {
+    @apply focus:outline-none border-none;
+}
+
+.border-b-animation {
+    @apply h-1 w-0 group-hover:w-full bg-gradient-to-r from-[#10b981] to-green-300 duration-500 transition-all ease-in-out;
+}
+
+.p-datatable-column-title {
+    @apply text-[#10b981];
+}
+
+.p-button{
+    @apply rounded-full;
+}
