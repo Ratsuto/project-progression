@@ -367,13 +367,13 @@ const downloadExcel = async () => {
           <template #empty> No data found.</template>
           <Column field="ID" header="No." sortable></Column>
           <Column field="PROJECT_CODE" header="PROJECT CODE" sortable></Column>
-          <Column field="PROJECT_NAME" header="PROJECT NAME" sortable></Column>
+          <Column field="PROJECT_NAME" header="PROJECT NAME" class="max-w-96 overflow-ellipsis" sortable></Column>
           <Column field="PROJECT_CATEGORY" header="CATEGORY" sortable></Column>
           <Column field="PROJECT_TYPE" header="TYPE" sortable></Column>
           <Column field="PROJECT_STATUS" header="STATUS" sortable></Column>
           <Column field="PROGRESS_STATUS" header="PROGRESS" sortable></Column>
           <Column field="OPERATOR_ID" header="DEVELOPER" sortable></Column>
-          <Column header="ACTION" class="flex justify-center">
+          <Column field="" header="ACTION">
             <template #body="{ data }">
               <div class="flex items-center justify-center gap-2">
                 <Button label="Update" icon="pi pi-pen-to-square" @click="selectRow(data)"/>

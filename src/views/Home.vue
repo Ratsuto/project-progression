@@ -14,7 +14,7 @@ import SideBar from "@/components/SideBar.vue";
 
 <style scoped>
 .bg-main {
-  background-image: url("../assets/images/background/bg-main-10.png");
+  background-image: url("../assets/images/background/bg-main.png");
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -45,11 +45,14 @@ const sysDate = new Date();
 </script>
 
 <template>
-  <div class="fixed bg-white backdrop-blur-sm w-full h-18 z-10">
+  <nav class="fixed bg-white backdrop-blur-sm w-full h-18 z-10">
     <div class="flex items-center justify-between h-full w-full px-6">
       <div class="flex items-center justify-between gap-2">
-        <Avatar :image="'../src/assets/images/icons/logo-1.png'" size="large" />
-        <p class="uppercase font-bold text-[#10b981]">Toanchet Pay Team</p>
+        <Avatar :image="'../src/assets/images/icons/logo-1.png'" size="large"/>
+        <div class="flex flex-col items-center justify-center">
+          <p class="uppercase font-bold text-[#10b981]">Toanchet Pay</p>
+          <p class="uppercase font-bold text-[#10b981]">Team</p>
+        </div>
       </div>
 
       <div class="flex items-center gap-2">
@@ -71,7 +74,7 @@ const sysDate = new Date();
         </ConfirmPopup>
       </div>
     </div>
-  </div>
+  </nav>
 
   <!--Sidebar-->
   <aside class="w-64 max-h-screen shadow-md flex flex-col">
