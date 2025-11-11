@@ -20,7 +20,7 @@ const routes = [
 
 
 const router = createRouter({
-    history: createWebHistory(), routes
+    history: createWebHistory('/progression/'), routes
 })
 
 //Route Guard to prevent direct access without login
