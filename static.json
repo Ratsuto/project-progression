@@ -1,0 +1,5 @@
+{
+  "routes": {
+    "/progression/*": "/progression/index.html"
+  }
+}
