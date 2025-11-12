@@ -6,7 +6,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/progression/',
+  /*base: '/progression/',*/
   plugins: [
     vue(),
     //vueDevTools(),
@@ -16,5 +16,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
-  //publicPath: '/progression/',
+  publicPath: '/progression/',
 })
