@@ -45,14 +45,11 @@ const sysDate = new Date();
 </script>
 
 <template>
-  <nav class="fixed bg-white backdrop-blur-sm w-full h-18 z-10">
+  <nav class="fixed bg-white/80 backdrop-blur-sm w-full h-18 z-10">
     <div class="flex items-center justify-between h-full w-full px-6">
       <div class="flex items-center justify-between gap-2">
         <Avatar :image="'../src/assets/images/icons/logo-1.png'" size="large"/>
-        <div class="flex flex-col items-center justify-center">
-          <p class="uppercase font-bold text-[#10b981]">Toanchet Pay</p>
-          <p class="uppercase font-bold text-[#10b981]">Team</p>
-        </div>
+        <p class="uppercase font-bold text-[#10b981]">Toanchet Pay Team</p>
       </div>
 
       <div class="flex items-center gap-2">
@@ -77,10 +74,10 @@ const sysDate = new Date();
   </nav>
 
   <!--Sidebar-->
-  <aside class="w-64 max-h-screen shadow-md flex flex-col">
+  <aside class="w-64 max-h-screen flex flex-col">
     <div class="h-18 bg-transparent"></div>
 
-    <nav class="flex flex-col max-h-full overflow-y-scroll pr-2 py-4 gap-1 h-full bg-white backdrop-blur-md">
+    <nav class="flex flex-col max-h-full overflow-y-scroll pr-2 py-4 gap-1 h-full bg-transparent backdrop-blur-md">
       <!-- Dashboard -->
       <router-link :to="{ name: 'Dashboard' }" v-slot="{ isActive, isExactActive}">
         <div :class="['flex items-center px-4 gap-4 h-11 w-0 rounded-r-full transition-all duration-300 font-semibold',
