@@ -21,11 +21,11 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory('/progression/'), routes
-})
+});
 
 //Route Guard to prevent direct access without login
 router.beforeEach((to, from, next) => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
     if (to.meta.requiresAuth && !token) {
         next('/')
     } else {
