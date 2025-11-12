@@ -310,6 +310,9 @@
   .w-64 {
     width: calc(var(--spacing) * 64);
   }
+  .w-240 {
+    width: calc(var(--spacing) * 240);
+  }
   .w-\[60rem\] {
     width: 60rem;
   }
@@ -578,6 +581,9 @@
   .text-blue-400 {
     color: var(--color-blue-400);
   }
+  .text-gray-300 {
+    color: var(--color-gray-300);
+  }
   .text-gray-400 {
     color: var(--color-gray-400);
   }
@@ -587,17 +593,11 @@
   .text-gray-600 {
     color: var(--color-gray-600);
   }
-  .text-gray-700 {
-    color: var(--color-gray-700);
-  }
   .text-gray-800 {
     color: var(--color-gray-800);
   }
   .text-green-600 {
     color: var(--color-green-600);
-  }
-  .text-surface-500 {
-    color: var(--p-surface-500);
   }
   .text-white {
     color: var(--color-white);
@@ -692,11 +692,6 @@
   .xl\:grid-cols-3 {
     @media (width >= 80rem) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-  .dark\:text-surface-400 {
-    @media (prefers-color-scheme: dark) {
-      color: var(--p-surface-400);
     }
   }
 }
@@ -964,9 +959,9 @@
   color: #10b981;
 }
 .p-dialog-mask {
-  background-color: color-mix(in srgb, oklch(27.4% 0.006 286.033) 20%, transparent);
+  background-color: color-mix(in srgb, oklch(27.4% 0.006 286.033) 50%, transparent);
   @supports (color: color-mix(in lab, red, red)) {
-    background-color: color-mix(in oklab, var(--color-zinc-800) 20%, transparent);
+    background-color: color-mix(in oklab, var(--color-zinc-800) 50%, transparent);
   }
   --tw-backdrop-blur: blur(var(--blur-sm));
   -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);

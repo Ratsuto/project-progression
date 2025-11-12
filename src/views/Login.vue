@@ -120,13 +120,14 @@ const registerUser = async () => {
   <Toast position="top-center"/>
   <div class="flex items-center justify-center min-h-screen">
     <img src="../assets/images/background/bg-main-10.png" alt="background" class="object-cover w-full h-screen absolute brightness-70 hue-rotate-10">
-    <div class="glass-element backdrop-blur-[3px] border border-white/10 overflow-hidden rounded-3xl shadow-md w-[60rem] h-auto grid grid-cols-2">
+
+    <div class="bg-white backdrop-blur-[3px] overflow-hidden rounded-3xl shadow-md w-240 h-auto grid grid-cols-2">
       <div class="py-8 px-16 flex flex-col gap-8">
         <div class="flex flex-col gap-2">
           <h1 class="text-4xl font-bold text-[#10b981] text-center">Task Management</h1>
         </div>
 
-        <div class="flex flex-col gap-4 text-white">
+        <div class="flex flex-col gap-4 text-gray-600">
           <div class="flex flex-col gap-2">
             <label for="username">Username</label>
             <InputText v-model="username" type="text" id="username" class=""/>
@@ -139,9 +140,9 @@ const registerUser = async () => {
         </div>
 
         <div class="flex items-center justify-between">
-          <div class="w-full border-b border-gray-400"></div>
+          <div class="w-full border-b border-gray-300"></div>
           <div class="px-6 text-[#10b981]">OR</div>
-          <div class="w-full border-b border-gray-400"></div>
+          <div class="w-full border-b border-gray-300"></div>
         </div>
 
         <div class="flex items-center justify-between text-gray-400">
@@ -157,11 +158,11 @@ const registerUser = async () => {
   </div>
 
   <Dialog v-model:visible="visible" header="Register User" :style="{ width: '45rem'}">
-    <span class="text-surface-500 dark:text-surface-400 block mb-4">Register your information.</span>
+    <span class="text-gray-400 block mb-4">Register your information.</span>
 
     <div class="flex flex-col items-center justify-center pb-4 gap-4">
       <div class="flex items-center gap-2">
-        <label class="font-semibold text-gray-700">Profile Image</label>
+        <label class="font-semibold text-gray-600">Profile Image</label>
         <FileUpload mode="basic" @select="onFileSelect" customUpload auto severity="secondary" class="p-button-outlined"/>
       </div>
       <img v-if="src" :src="src" alt="Image" class="object-center rounded-xl w-32 h-32"/>
@@ -211,11 +212,11 @@ const registerUser = async () => {
 </template>
 
 <style scoped>
-.p-inputtext {
+/*.p-inputtext, .p-select, .p-select-label {
   border: 1px white solid;
   background: none;
   color: white;
-}
+}*/
 
 .glass-element {
   background: linear-gradient(

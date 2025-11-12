@@ -32,7 +32,7 @@
 }
 
 .p-dialog-mask {
-    @apply bg-zinc-800/20 backdrop-blur-sm;
+    @apply bg-zinc-800/50 backdrop-blur-sm;
 }
 
 .p-dialog-close-button {
