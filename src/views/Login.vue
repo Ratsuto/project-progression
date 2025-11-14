@@ -1,15 +1,9 @@
 <script setup>
-import {onMounted, ref} from 'vue';
+import {getCurrentInstance, onMounted, ref} from 'vue';
 import {useRouter} from 'vue-router';
-import axios from 'axios';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
-import Toast from "primevue/toast";
-import Dialog from 'primevue/dialog';
-import FileUpload from 'primevue/fileupload';
-
 import {useToast} from "primevue/usetoast";
-import Select from "primevue/select";
+const axios = getCurrentInstance().appContext.config.globalProperties.$axios;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const toast = useToast();
 const router = useRouter();
@@ -30,7 +24,7 @@ const operatorRole = ref();
 
 const handleLogin = async () => {
   try {
-    const resp = await axios.post('http://localhost:3000/server-side/api/auth/login', {
+    const resp = await axios.post(`${apiUrl}/auth/login`, {
       username: username.value,
       password: password.value
     });
@@ -49,7 +43,7 @@ const handleLogin = async () => {
 }
 
 onMounted(async () => {
-  const res = await axios.post('http://localhost:3000/server-side/api/users/get-role-detail');
+  const res = await axios.post(`${apiUrl}/users/get-role-detail`);
   if (res.data.success) {
     roles.value = res.data.operator;
   }
@@ -93,7 +87,7 @@ const registerUser = async () => {
 
   isRegClick.value = true;
   try {
-    const resp = await axios.post('http://localhost:3000/server-side/api/auth/register', formData,
+    const resp = await axios.post(`${apiUrl}/auth/register`, formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -119,23 +113,17 @@ const registerUser = async () => {
 <template>
   <Toast position="top-center"/>
   <div class="flex items-center justify-center min-h-screen">
-    <img src="../assets/images/background/bg-main-10.png" alt="background" class="object-cover w-full h-screen absolute brightness-70 hue-rotate-10">
+    <img src="../assets/images/background/bg-main-8.png" alt="background" class="object-cover w-full h-screen absolute">
 
-    <div class="bg-white backdrop-blur-[3px] overflow-hidden rounded-3xl shadow-md w-240 h-auto grid grid-cols-2">
-      <div class="py-8 px-16 flex flex-col gap-8">
+    <div class="bg-white backdrop-blur-[3px] overflow-hidden rounded-3xl shadow-md w-220 h-auto grid grid-cols-2">
+      <div class="py-8 px-12 flex flex-col gap-6">
         <div class="flex flex-col gap-2">
-          <h1 class="text-4xl font-bold text-[#10b981] text-center">Task Management</h1>
+          <h1 class="text-3xl font-bold text-[#10b981] text-center">Task Management</h1>
         </div>
 
-        <div class="flex flex-col gap-4 text-gray-600">
-          <div class="flex flex-col gap-2">
-            <label for="username">Username</label>
-            <InputText v-model="username" type="text" id="username" class=""/>
-          </div>
-          <div class="flex flex-col gap-2">
-            <label for="password">Password</label>
-            <InputText v-model="password" type="password" id="password"/>
-          </div>
+        <div class="flex flex-col gap-6 text-gray-600">
+          <InputText v-model="username" type="text" id="username" placeholder="Username" class="rounded-full"/>
+          <InputText v-model="password" type="password" id="password" placeholder="Password" class="rounded-full"/>
           <Button @click="handleLogin" label="Sign in" class="w-full p-button"/>
         </div>
 
@@ -145,7 +133,7 @@ const registerUser = async () => {
           <div class="w-full border-b border-gray-300"></div>
         </div>
 
-        <div class="flex items-center justify-between text-gray-400">
+        <div class="flex items-center justify-between text-gray-400 text-sm">
           <label>Don't have account yet?</label>
           <a class="text-[#10b981] hover:text-yellow-500 cursor-pointer" @click="visible = true">Register here</a>
         </div>
@@ -157,7 +145,7 @@ const registerUser = async () => {
     </div>
   </div>
 
-  <Dialog v-model:visible="visible" header="Register User" :style="{ width: '45rem'}">
+  <Dialog v-model:visible="visible" header="Register User" :style="{ width: '45rem'}" class="rounded-3xl px-4">
     <span class="text-gray-400 block mb-4">Register your information.</span>
 
     <div class="flex flex-col items-center justify-center pb-4 gap-4">

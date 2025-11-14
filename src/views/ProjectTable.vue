@@ -1,23 +1,11 @@
 <script setup>
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import {ref, onMounted} from 'vue';
-import axios from "axios";
+import {ref, onMounted, getCurrentInstance} from 'vue';
 import {FilterMatchMode} from '@primevue/core/api';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
-import IconField from 'primevue/iconfield';
-import InputIcon from 'primevue/inputicon';
-import Toast from 'primevue/toast';
 import {useToast} from "primevue/usetoast";
-import Dialog from "primevue/dialog";
-import Select from "primevue/select";
-import DatePicker from "primevue/datepicker";
-import Textarea from "primevue/textarea";
-import InputNumber from "primevue/inputnumber";
-import Slider from "primevue/slider";
-import ConfirmDialog from "primevue/confirmdialog";
 import {useConfirm} from "primevue/useconfirm";
+
+const axios = getCurrentInstance().appContext.config.globalProperties.$axios;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const progressData = ref([]);
 const operatorID = localStorage.getItem('operatorId');
@@ -86,14 +74,13 @@ const note = ref('');
 
 const loadProgressData = async () => {
   try {
-    const res = await axios.post('http://localhost:3000/server-side/api/progress/list-progress', {operatorID: operatorID})
+    const res = await axios.post(`${apiUrl}/progress/list-progress`, {operatorID: operatorID})
     if (res.data.success) {
       progressData.value = res.data.progress
     }
   } catch (error) {
     console.log(error);
   }
-
 };
 
 onMounted(() => {
@@ -171,7 +158,7 @@ const submitData = () => {
     },
     accept: async () => {
       try {
-        const resp = await axios.post('http://localhost:3000/server-side/api/progress/add-progress', {
+        const resp = await axios.post(`${apiUrl}/progress/add-progress`, {
           projectCode: projectNo.value,
           projectName: projectName.value,
           projectCate: projectCate.value.code,
@@ -214,7 +201,7 @@ const submitData = () => {
 
 const updateProgress = async () => {
   try {
-    const resp = await axios.post('http://localhost:3000/server-side/api/progress/update-progress', {
+    const resp = await axios.post(`${apiUrl}/progress/update-progress`, {
       Id: ID.value,
       projectCode: projectNo.value,
       projectName: projectName.value,
@@ -269,7 +256,7 @@ const removeProgress = (data) => {
     },
     accept: async () => {
       try {
-        const resp = await axios.post('http://localhost:3000/server-side/api/progress/remove-progress', {
+        const resp = await axios.post(`${apiUrl}/progress/remove-progress`, {
           Id: ID.value,
           operatorID: operatorID
         });
@@ -333,11 +320,11 @@ const closeModal = () => {
 
 const downloadExcel = async () => {
   try {
-    const res = await axios.get(`http://localhost:3000/server-side/api/export/excel?operatorID=${operatorID}&date=${formatLocalDateIso(new Date())}`);
+    const res = await axios.get(`${apiUrl}/export/excel?operatorID=${operatorID}&date=${formatLocalDateIso(new Date())}`);
     if (res.data.status === 400) {
       toast.add({severity: 'info', summary: 'Information', detail: res.data.message, life: 3000});
     } else {
-      window.location.href = `http://localhost:3000/server-side/api/export/excel?operatorID=${operatorID}&date=${formatLocalDateIso(new Date())}`;
+      window.location.href = `${apiUrl}/export/excel?operatorID=${operatorID}&date=${formatLocalDateIso(new Date())}`;
     }
   } catch (err) {
     toast.add({severity: 'info', summary: 'Information', detail: "You don't have data update for today", life: 3000});
@@ -348,9 +335,14 @@ const downloadExcel = async () => {
 <template>
   <Toast/>
   <ConfirmDialog></ConfirmDialog>
-  <div class="max-h-full pt-19">
+  <div class="max-h-full pt-16">
     <section class="px-6 py-4 flex flex-col gap-6">
-      <div class="card p-6 flex flex-col gap-6">
+      <div class="card p-6 flex flex-col gap-8">
+        <div class="flex items-center gap-4 w-full justify-end text-4xl text-blue-400">
+          <i class="pi pi-inbox text-4xl"></i>
+          <h1 class="uppercase">Update Progress</h1>
+        </div>
+
         <DataTable v-model:filters="filters" :value="progressData" paginator :rows="10" dataKey="id" filterDisplay="menu" stripedRows removableSort
                    :globalFilterFields="['PROJECT_CODE', 'OPERATOR_ID', 'PROJECT_NAME', 'PROJECT_CATEGORY', 'PROJECT_TYPE','PROJECT_STATUS','PROGRESS_STATUS']">
           <template #header>
@@ -375,9 +367,9 @@ const downloadExcel = async () => {
           <Column field="OPERATOR_ID" header="DEVELOPER" sortable></Column>
           <Column field="" header="ACTION">
             <template #body="{ data }">
-              <div class="flex items-center justify-center gap-2">
-                <Button label="Update" icon="pi pi-pen-to-square" @click="selectRow(data)"/>
-                <Button icon="pi pi-trash" severity="danger" @click="removeProgress(data)"/>
+              <div class="flex items-center gap-2">
+                <Button label="Update" icon="pi pi-pen-to-square" class="h-9" @click="selectRow(data)"/>
+                <Button icon="pi pi-trash" severity="danger" class="h-9 w-9" @click="removeProgress(data)"/>
               </div>
             </template>
           </Column>
@@ -468,25 +460,37 @@ const downloadExcel = async () => {
         <div class="grid grid-cols-1 lg:grid-cols-2 items-center w-full gap-6">
           <div class="flex flex-col items-center gap-4">
             <label class="font-semibold">DEV</label>
-            <InputNumber v-model.number="devValue" class="w-full mb-2" :min="0" :max="100" suffix=" %"/>
+            <IconField class="mb-2">
+              <InputNumber v-model.number="devValue" class="w-full" :min="0" :max="100"/>
+              <InputIcon class="pi pi-percentage"/>
+            </IconField>
             <Slider v-model="devValue" class="w-full"/>
           </div>
 
           <div class="flex flex-col items-center gap-4">
             <label class="font-semibold">SIT</label>
-            <InputNumber v-model.number="sitValue" class="w-full mb-2" :min="0" :max="100" suffix=" %"/>
+            <IconField class="mb-2">
+              <InputNumber v-model.number="sitValue" class="w-full" :min="0" :max="100"/>
+              <InputIcon class="pi pi-percentage"/>
+            </IconField>
             <Slider v-model="sitValue" class="w-full"/>
           </div>
 
           <div class="flex flex-col items-center gap-4">
             <label class="font-semibold">UAT</label>
-            <InputNumber v-model.number="uatValue" class="w-full mb-2" :min="0" :max="100" suffix=" %"/>
+            <IconField class="mb-2">
+              <InputNumber v-model.number="uatValue" class="w-full" :min="0" :max="100"/>
+              <InputIcon class="pi pi-percentage"/>
+            </IconField>
             <Slider v-model="uatValue" class="w-full"/>
           </div>
 
           <div class="flex flex-col items-center gap-4">
             <label class="font-semibold">PILOT</label>
-            <InputNumber v-model.number="pilotValue" class="w-full mb-2" :min="0" :max="100" suffix=" %"/>
+            <IconField class="mb-2">
+              <InputNumber v-model.number="pilotValue" class="w-full" :min="0" :max="100"/>
+              <InputIcon class="pi pi-percentage"/>
+            </IconField>
             <Slider v-model="pilotValue" class="w-full"/>
           </div>
         </div>
@@ -498,17 +502,26 @@ const downloadExcel = async () => {
 
         <div class="flex items-center w-full gap-2">
           <label class="w-1/3">Last Month</label>
-          <InputNumber v-model.number="lastMonthValue" class="w-full" :min="0" :max="100" suffix=" %"/>
+          <IconField class="w-full">
+            <InputNumber v-model.number="lastMonthValue" class="w-full" :min="0" :max="100"/>
+            <InputIcon class="pi pi-percentage"/>
+          </IconField>
         </div>
 
         <div class="flex items-center w-full gap-2">
           <label class="w-1/3">This Month</label>
-          <InputNumber v-model.number="thisMonthValue" :model-value="(devValue + sitValue + uatValue + pilotValue)/4" class="w-full" :min="0" :max="100" suffix=" %" readonly/>
+          <IconField class="w-full">
+            <InputNumber v-model.number="thisMonthValue" :model-value="(devValue + sitValue + uatValue + pilotValue)/4" class="w-full" :min="0" :max="100" readonly/>
+            <InputIcon class="pi pi-percentage"/>
+          </IconField>
         </div>
 
         <div class="flex items-center w-full gap-2">
           <label class="w-1/3">Increment</label>
-          <InputNumber v-model.number="progressIncrement" :model-value="thisMonthValue - lastMonthValue" class="w-full" :min="0" :max="100" suffix=" %" readonly/>
+          <IconField class="w-full">
+            <InputNumber v-model.number="progressIncrement" :model-value="thisMonthValue - lastMonthValue" class="w-full" :min="0" :max="100" readonly/>
+            <InputIcon class="pi pi-percentage"/>
+          </IconField>
         </div>
 
         <div class="flex items-center w-full gap-2">
@@ -521,8 +534,8 @@ const downloadExcel = async () => {
         <h1 class="card-header">Note</h1>
         <div class="w-full border-b border-dashed border-gray-300"></div>
 
-        <div class="flex items-center w-full gap-2">
-          <Textarea v-model="note" rows="7" style="resize: none" fluid/>
+        <div class="flex items-center h-full w-full gap-2">
+          <Textarea v-model="note" rows="9" style="resize: none" class="h-full" fluid/>
         </div>
       </div>
     </section>

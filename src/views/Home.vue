@@ -1,5 +1,4 @@
 <script setup>
-
 import SideBar from "@/components/SideBar.vue";
 </script>
 
@@ -14,7 +13,7 @@ import SideBar from "@/components/SideBar.vue";
 
 <style scoped>
 .bg-main {
-  background-image: url("../assets/images/background/bg-main.png");
+  background-image: url("../assets/images/background/bg-main-8.png");
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;

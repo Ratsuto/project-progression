@@ -3,21 +3,25 @@ import Dashboard from '@/views/Dashboard.vue'
 import ProjectTable from "@/views/ProjectTable.vue";
 import Login from "@/views/Login.vue";
 import Home from "@/views/Home.vue";
-
+import PageNotFound from "@/views/PageNotFound.vue";
+import Operators from "@/views/Operators.vue";
 
 const routes = [
-    {path: '/', redirect: '/Login'},
-    {path: '/Login', name: 'Login', component: Login},
+    {path: '/', redirect: '/login'},
+    {path: '/login', name: 'Login', component: Login},
     {
-        path: '/Home', name: 'Home', component: Home,
+        path: '/home', name: 'Home', component: Home,
         children: [
             {path: '', name: 'Dashboard', component: Dashboard},
-            {path: '/UpdateProject', name: 'UpdateProject', component: ProjectTable}
+            {path: '/update-progress', name: 'ProjectTable', component: ProjectTable},
+            {path: '/operator', name: 'Operators', component: Operators},
         ],
         meta: {requiresAuth: true} // protect this group
     },
-]
 
+    // Catch-all route (must be last)
+    { path: '/:pathMatch(.*)*', name: 'NotFound', component: PageNotFound },
+]
 
 const router = createRouter({
     history: createWebHistory('/progression/'), routes
