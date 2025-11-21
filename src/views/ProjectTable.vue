@@ -337,12 +337,7 @@ const downloadExcel = async () => {
   <ConfirmDialog></ConfirmDialog>
   <div class="max-h-full pt-16">
     <section class="px-6 py-4 flex flex-col gap-6">
-      <div class="card p-6 flex flex-col gap-8">
-        <div class="flex items-center gap-4 w-full justify-end text-4xl text-blue-400">
-          <i class="pi pi-inbox text-4xl"></i>
-          <h1 class="uppercase">Update Progress</h1>
-        </div>
-
+      <div class="card p-8 flex flex-col gap-8">
         <DataTable v-model:filters="filters" :value="progressData" paginator :rows="10" dataKey="id" filterDisplay="menu" stripedRows removableSort
                    :globalFilterFields="['PROJECT_CODE', 'OPERATOR_ID', 'PROJECT_NAME', 'PROJECT_CATEGORY', 'PROJECT_TYPE','PROJECT_STATUS','PROGRESS_STATUS']">
           <template #header>
@@ -352,7 +347,7 @@ const downloadExcel = async () => {
                 <InputIcon>
                   <i class="pi pi-search"/>
                 </InputIcon>
-                <InputText v-model="filters['global'].value" placeholder="Keyword Search"/>
+                <InputText v-model="filters['global'].value" placeholder="Keyword Search" class="rounded-xl"/>
               </IconField>
             </div>
           </template>
@@ -364,6 +359,13 @@ const downloadExcel = async () => {
           <Column field="PROJECT_TYPE" header="TYPE" sortable></Column>
           <Column field="PROJECT_STATUS" header="STATUS" sortable></Column>
           <Column field="PROGRESS_STATUS" header="PROGRESS" sortable></Column>
+          <Column field="PROGRESS_INCREASE" header="INCREASE" sortable>
+            <template #body="slotProps">
+              <div class="text-orange-500 font-bold">
+                {{ slotProps.data.PROGRESS_INCREASE }}%
+              </div>
+            </template>
+          </Column>
           <Column field="OPERATOR_ID" header="DEVELOPER" sortable></Column>
           <Column field="" header="ACTION">
             <template #body="{ data }">
@@ -547,3 +549,7 @@ const downloadExcel = async () => {
     </div>
   </Dialog>
 </template>
+
+<style scoped>
+
+</style>

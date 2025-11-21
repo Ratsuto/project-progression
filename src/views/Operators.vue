@@ -7,6 +7,7 @@ import {useConfirm} from "primevue/useconfirm";
 const axios = getCurrentInstance().appContext.config.globalProperties.$axios;
 const apiUrl = import.meta.env.VITE_API_URL;
 const filters = ref();
+const visible = ref(false);
 
 const initFilters = () => {
   filters.value = {
@@ -39,12 +40,7 @@ onMounted(async () => {
   <ConfirmDialog></ConfirmDialog>
   <div class="max-h-full pt-16">
     <section class="px-6 py-4 flex flex-col gap-6">
-      <div class="card p-6 flex flex-col gap-8">
-        <div class="flex items-center gap-4 w-full justify-end text-4xl text-blue-400">
-          <i class="pi pi-user text-4xl"></i>
-          <h1 class="uppercase">Operators</h1>
-        </div>
-
+      <div class="card p-8 flex flex-col gap-8">
         <DataTable v-model:filters="filters" :value="dataOperator" paginator :rows="10" dataKey="id" filterDisplay="menu" stripedRows removableSort
                    :globalFilterFields="['OPERATOR_ID', 'OPERATOR_NAME', 'OPERATOR_EMAIL', 'OPERATOR_STATUS', 'ATTEMPT','ROLE_NAME']">
           <template #header>
@@ -54,12 +50,17 @@ onMounted(async () => {
                 <InputIcon>
                   <i class="pi pi-search"/>
                 </InputIcon>
-                <InputText v-model="filters['global'].value" placeholder="Keyword Search"/>
+                <InputText v-model="filters['global'].value" placeholder="Keyword Search" class="rounded-xl"/>
               </IconField>
             </div>
           </template>
           <template #empty> No data found.</template>
           <Column field="OPERATOR_ID" header="ID" sortable></Column>
+          <Column field="OPERATOR_IMAGE" header="PROFILE">
+            <template #body="slotProps">
+              <Avatar :image="slotProps.data.OPERATOR_IMAGE ? `data:image/jpeg;base64,${slotProps.data.OPERATOR_IMAGE}` : '../src/assets/images/icons/default-image.svg'" shape="circle"/>
+            </template>
+          </Column>
           <Column field="OPERATOR_NAME" header="OPERATOR NAME" sortable></Column>
           <Column field="OPERATOR_EMAIL" header="EMAIL" class="max-w-96 overflow-ellipsis" sortable></Column>
           <Column field="OPERATOR_STATUS" header="STATUS" sortable>

@@ -3,7 +3,7 @@ import SideBar from "@/components/SideBar.vue";
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-main text-gray-800">
+  <div class="flex min-h-screen bg-[#eef3fa] dark:bg-black text-gray-800 dark:text-white">
     <SideBar/>
     <div class="flex-1 w-full max-h-screen overflow-y-auto">
       <router-view/>

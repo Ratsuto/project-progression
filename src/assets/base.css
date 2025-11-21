@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tailwindcss-primeui";
 
+@custom-variant dark (&:where(.dark-mode, .dark-mode *));
+
 ::-webkit-scrollbar {
     display: none;
 }
@@ -15,8 +17,13 @@
     src: url("@/assets/fonts/GoogleSansCode-Regular.ttf") format("truetype");
 }
 
+@font-face {
+    font-family: "PTSans";
+    src: url("@/assets/fonts/PTSans-Regular.ttf") format("truetype");
+}
+
 *, html, body {
-    font-family: "GoogleSansCode", "UbuntuSans", sans-serif, serif, courier;
+    font-family: "PTSans", "GoogleSansCode", "UbuntuSans", sans-serif, serif, courier;
     font-style: normal;
 }
 
@@ -29,7 +36,7 @@
 }
 
 .card {
-    @apply bg-white rounded-2xl text-gray-700 border border-gray-200 overflow-hidden;
+    @apply bg-white dark:bg-zinc-900 rounded-3xl text-gray-700 dark:text-white backdrop-blur-md overflow-hidden;
 }
 
 .card-header {
@@ -53,5 +60,9 @@
 }
 
 .p-button {
-    @apply rounded-full;
+    @apply rounded-3xl;
+}
+
+.p-inputtext, .p-select, .p-textarea{
+    @apply rounded-xl;
 }

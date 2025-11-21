@@ -1,7 +1,4 @@
 <script setup>
-import IconDashboard from "@/components/icons/IconDashboard.vue";
-import IconProjectTable from "@/components/icons/IconProjectTable.vue";
-
 import {ref, onMounted, getCurrentInstance} from "vue";
 import {useConfirm} from "primevue/useconfirm";
 import {useRouter} from 'vue-router';
@@ -50,33 +47,66 @@ const items = ref([
     route: 'home',
   },
   {
-    label: 'Update Progress',
+    label: 'Monthly Progress',
     icon: 'pi pi-inbox',
     route: 'update-progress',
   },
   {
+    label: 'Tasks Management',
+    icon: 'pi pi-calendar-clock',
+    route: 'task-management',
+  },
+  {
     label: 'Management',
-    icon: 'pi pi-home',
-    items:[
+    icon: 'pi pi-briefcase',
+    items: [
       {
         label: 'Operators',
         route: 'operator',
-        icon: 'pi pi-user',
       },
       {
         label: 'Roles',
         route: 'operator-role',
-        icon: 'pi pi-user',
       }
     ],
-  }
+  },
 ]);
+
+const icon = ref('');
+const saved = localStorage.getItem("theme") || "light";
+
+function toggleDarkMode() {
+  if (icon.value === 'pi pi-sun') {
+    document.documentElement.classList.add('dark-mode');
+    localStorage.setItem("theme", "dark");
+    applyTheme("dark");
+    icon.value = 'pi pi-moon';
+  } else {
+    document.documentElement.classList.remove('dark-mode');
+    localStorage.setItem("theme", "light");
+    applyTheme("light");
+    icon.value = 'pi pi-sun';
+  }
+  // document.documentElement.classList.toggle('dark-mode');
+}
+
+function applyTheme(theme) {
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark-mode');
+    icon.value = 'pi pi-moon';
+  } else {
+    document.documentElement.classList.remove('dark-mode');
+    icon.value = 'pi pi-sun';
+  }
+}
+
+applyTheme(saved);
 
 </script>
 
 <template>
   <div class="fixed bg-transparent w-full z-10">
-    <Menubar :model="items" class="rounded-none! border-none!">
+    <Menubar :model="items" class="rounded-none! border-none! bg-white/70 dark:bg-zinc-800/70 backdrop-blur-md">
       <template #item="{ item, props, hasSubmenu }" #start>
         <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
           <a v-ripple :href="href" v-bind="props.action" @click="navigate">
@@ -91,7 +121,7 @@ const items = ref([
         </a>
       </template>
       <template #end>
-        <div class="flex items-center gap-3 text-gray-500">
+        <div class="flex items-center gap-3 text-gray-500 dark:text-white">
           <div class="text-sm">
             {{
               new Date().toLocaleDateString('en-US', {
@@ -102,22 +132,23 @@ const items = ref([
               })
             }}
           </div>
-          <i class="pi pi-cog cursor-pointer"></i>
-          <Avatar class="cursor-pointer" :image="users.OPERATOR_IMAGE ? `data:image/jpeg;base64,${users.OPERATOR_IMAGE}` : '../src/assets/images/icons/default-image.svg'" shape="circle" @click="requireConfirmation($event)"/>
+          |
+          <Button :icon="icon" @click="toggleDarkMode()" class="rounded-full! h-8! w-8! border-none bg-transparent hover:bg-gray-100 text-gray-600 dark:text-white hover:text-gray-600"/>
+          <Avatar class="cursor-pointer" :image="users.OPERATOR_IMAGE ? `data:image/jpeg;base64,${users.OPERATOR_IMAGE}` : '../src/assets/images/icons/default-image.svg'"
+                  shape="circle" @click="requireConfirmation($event)"/>
         </div>
       </template>
     </Menubar>
   </div>
 
-  <ConfirmPopup group="headless">
-    <template #container="{ message, acceptCallback, rejectCallback }">
+  <ConfirmPopup group="headless" class="w-52">
+    <template #container="{ acceptCallback, rejectCallback }">
       <div class="rounded p-4">
         <div class="pb-2">
           <h1 class="text-lg">{{ users.OPERATOR_ID }}</h1>
           <p class="text-[0.65rem] text-[#10b981] uppercase">{{ users.OPERATOR_NAME }}</p>
         </div>
         <div class="border-b border-dashed border-gray-200 mb-4"></div>
-        <span>{{ message.message }}</span>
         <div class="flex items-center justify-between gap-2 mt-4">
           <Button label="Logout" @click="acceptCallback" size="small" severity="danger"></Button>
           <Button label="Cancel" variant="outlined" @click="rejectCallback" severity="secondary" size="small" text></Button>

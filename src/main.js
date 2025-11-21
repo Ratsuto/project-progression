@@ -29,6 +29,16 @@ import Avatar from 'primevue/avatar';
 import ConfirmPopup from 'primevue/confirmpopup';
 import Menubar from 'primevue/menubar';
 import FileUpload from 'primevue/fileupload';
+import Skeleton from 'primevue/skeleton';
+import FloatLabel from 'primevue/floatlabel';
+import Password from 'primevue/password';
+
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
+
 
 /*Service*/
 import axios from "axios";
@@ -48,7 +58,8 @@ app.use(PrimeVue, {
             cssLayer: {
                 name: 'primevue',
                 order: 'theme, base, primevue'
-            }
+            },
+            darkModeSelector: '.dark-mode',
         }
     }
 });
@@ -75,5 +86,13 @@ app.component("Avatar", Avatar);
 app.component("ConfirmPopup", ConfirmPopup);
 app.component("Menubar", Menubar);
 app.component("FileUpload", FileUpload);
+app.component("Skeleton", Skeleton);
+app.component("FloatLabel", FloatLabel);
+app.component("Tabs", Tabs);
+app.component("TabList", TabList);
+app.component("Tab", Tab);
+app.component("TabPanels", TabPanels);
+app.component("TabPanel", TabPanel);
+app.component("Password", Password);
 
 app.mount('#app');

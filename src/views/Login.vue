@@ -122,8 +122,14 @@ const registerUser = async () => {
         </div>
 
         <div class="flex flex-col gap-6 text-gray-600">
-          <InputText v-model="username" type="text" id="username" placeholder="Username" class="rounded-full"/>
-          <InputText v-model="password" type="password" id="password" placeholder="Password" class="rounded-full"/>
+          <FloatLabel variant="on">
+            <InputText v-model="username" type="text" id="username" autocomplete="off" />
+            <label for="on_label">Username</label>
+          </FloatLabel>
+          <FloatLabel variant="on">
+            <Password v-model="password" toggleMask fluid />
+            <label for="on_label">Password</label>
+          </FloatLabel>
           <Button @click="handleLogin" label="Sign in" class="w-full p-button"/>
         </div>
 
@@ -169,12 +175,12 @@ const registerUser = async () => {
 
       <div class="flex flex-col gap-1">
         <label for="operatorPass" class="font-semibold">Password</label>
-        <InputText id="operatorPass" class="flex-auto" type="password" :invalid="operatorPass.toString().length < 12" v-model="operatorPass"/>
+        <Password v-model="operatorPass" toggleMask fluid :invalid="operatorPass.toString().length < 12"/>
       </div>
 
       <div class="flex flex-col gap-1">
         <label for="operatorPassConfirm" class="font-semibold">Confirm Password</label>
-        <InputText id="operatorPassConfirm" class="flex-auto" type="password" :invalid="operatorPass !== operatorPassConfirm" autocomplete="off" v-model="operatorPassConfirm"/>
+        <Password v-model="operatorPassConfirm" toggleMask fluid :invalid="operatorPass !== operatorPassConfirm"/>
       </div>
 
       <div class="flex flex-col gap-1">
@@ -186,8 +192,7 @@ const registerUser = async () => {
         <label for="operatorRole" class="font-semibold">Role</label>
         <Select id="operatorRole" v-model="operatorRole" :options="roles" :invalid="!operatorRole"
                 optionValue="ROLE_ID" optionLabel="ROLE_NAME" placeholder="Select a Role"
-                checkmark :highlightOnSelect="false" class="w-full"
-        />
+                checkmark :highlightOnSelect="false" class="w-full" />
       </div>
     </div>
 
@@ -200,12 +205,6 @@ const registerUser = async () => {
 </template>
 
 <style scoped>
-/*.p-inputtext, .p-select, .p-select-label {
-  border: 1px white solid;
-  background: none;
-  color: white;
-}*/
-
 .glass-element {
   background: linear-gradient(
       135deg,
