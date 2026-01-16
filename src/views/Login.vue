@@ -2,6 +2,9 @@
 import {getCurrentInstance, onMounted, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {useToast} from "primevue/usetoast";
+import {encryptPayload} from "@/assets/js/utils/Encryption.js";
+import {baseRequest} from "@/assets/js/utils/BaseRequest.js";
+
 const axios = getCurrentInstance().appContext.config.globalProperties.$axios;
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -22,23 +25,58 @@ const isRegClick = ref(false);
 const roles = ref([]);
 const operatorRole = ref();
 
+const loginIcon = ref(false);
+
 const handleLogin = async () => {
+  loginIcon.value = true;
+  baseRequest.username = username.value;
+  baseRequest.password = password.value;
+
+  const encryptedData = encryptPayload({
+    username: username.value,
+    password: password.value,
+    baseRequest: baseRequest,
+  });
+
   try {
     const resp = await axios.post(`${apiUrl}/auth/login`, {
-      username: username.value,
-      password: password.value
+      encryptedData: encryptedData
     });
 
-    if (resp.data.success) {
-      toast.add({severity: 'success', summary: 'Success', detail: resp.data.message, life: 3000});
-      localStorage.setItem('token', resp.data.token); // store token
-      localStorage.setItem('operatorId', username.value);
-      await router.push('/Home');
-    } else {
-      toast.add({severity: 'error', summary: 'Failed', detail: resp.data.message, life: 3000});
+    if (!resp.data?.success) {
+      toast.add({
+        severity: 'error',
+        summary: 'Failed',
+        detail: resp.data?.message || 'Login failed',
+        life: 3000
+      });
+      loginIcon.value = false;
+      return;
     }
+
+    const retrievedData = resp.data.result;
+
+    localStorage.setItem('token', retrievedData.token);
+    localStorage.setItem('sessionId', retrievedData.sessionID);
+    localStorage.setItem('operatorId', username.value);
+
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: resp.data.message,
+      life: 3000
+    });
+
+    await router.push('/Home');
   } catch (e) {
-    toast.add({severity: 'error', summary: 'Network error', detail: 'Is backend running?', life: 3000});
+    loginIcon.value = false;
+
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: e.message,
+      life: 3000
+    });
   }
 }
 
@@ -61,12 +99,20 @@ function onFileSelect(event) {
 }
 
 const registerUser = async () => {
+  baseRequest.username = operatorID.value;
+  baseRequest.password = operatorPass.value;
+
+  const encryptedData = encryptPayload({
+    operatorId: operatorID.value,
+    operatorName: operatorName.value,
+    operatorPass: operatorPass.value,
+    operatorEmail: operatorEmail.value,
+    roleId: operatorRole.value,
+    baseRequest: baseRequest
+  });
+
   const formData = new FormData();
-  formData.append('operatorId', operatorID.value);
-  formData.append('operatorName', operatorName.value);
-  formData.append('operatorPass', operatorPass.value);
-  formData.append('operatorEmail', operatorEmail.value);
-  formData.append('roleId', operatorRole.value);
+  formData.append('encryptedData', encryptedData);
   formData.append('operatorImage', operatorImage.value);
 
   if (operatorID.value === '') {
@@ -86,6 +132,7 @@ const registerUser = async () => {
   }
 
   isRegClick.value = true;
+
   try {
     const resp = await axios.post(`${apiUrl}/auth/register`, formData,
         {
@@ -111,7 +158,7 @@ const registerUser = async () => {
 </script>
 
 <template>
-  <Toast position="top-center"/>
+  <Toast position="top-right"/>
   <div class="flex items-center justify-center min-h-screen">
     <img src="../assets/images/background/bg-main-8.png" alt="background" class="object-cover w-full h-screen absolute">
 
@@ -123,14 +170,14 @@ const registerUser = async () => {
 
         <div class="flex flex-col gap-6 text-gray-600">
           <FloatLabel variant="on">
-            <InputText v-model="username" type="text" id="username" autocomplete="off" />
+            <InputText v-model="username" type="text" autocomplete="off"/>
             <label for="on_label">Username</label>
           </FloatLabel>
           <FloatLabel variant="on">
-            <Password v-model="password" toggleMask fluid />
+            <Password v-model="password" toggleMask fluid/>
             <label for="on_label">Password</label>
           </FloatLabel>
-          <Button @click="handleLogin" label="Sign in" class="w-full p-button"/>
+          <Button @click="handleLogin" label="Sign in" :icon="loginIcon ? 'pi pi-spin pi-spinner' : ''" :disabled="loginIcon" iconPos="right" class="w-full p-button"/>
         </div>
 
         <div class="flex items-center justify-between">
@@ -165,34 +212,34 @@ const registerUser = async () => {
     <div class="grid grid-cols-2 gap-4 text-gray-600">
       <div class="flex flex-col gap-1">
         <label for="operatorID" class="font-semibold">User ID</label>
-        <InputText id="operatorID" class="flex-auto" autocomplete="off" :invalid="!operatorID" v-model="operatorID"/>
+        <InputText id="operatorID" class="flex-auto" autocomplete="off" v-model="operatorID" placeholder="ABCXXXXX"/>
       </div>
 
       <div class="flex flex-col gap-1">
         <label for="operatorName" class="font-semibold">Full Name</label>
-        <InputText id="operatorName" class="flex-auto" autocomplete="off" v-model="operatorName"/>
+        <InputText id="operatorName" class="flex-auto" autocomplete="off" v-model="operatorName" placeholder="Jane Doe"/>
       </div>
 
       <div class="flex flex-col gap-1">
         <label for="operatorPass" class="font-semibold">Password</label>
-        <Password v-model="operatorPass" toggleMask fluid :invalid="operatorPass.toString().length < 12"/>
+        <Password v-model="operatorPass" toggleMask fluid placeholder="********"/>
       </div>
 
       <div class="flex flex-col gap-1">
         <label for="operatorPassConfirm" class="font-semibold">Confirm Password</label>
-        <Password v-model="operatorPassConfirm" toggleMask fluid :invalid="operatorPass !== operatorPassConfirm"/>
+        <Password v-model="operatorPassConfirm" toggleMask fluid :invalid="operatorPass !== operatorPassConfirm" placeholder="********"/>
       </div>
 
       <div class="flex flex-col gap-1">
         <label for="operatorEmail" class="font-semibold">Email</label>
-        <InputText id="operatorEmail" type="email" class="flex-auto" autocomplete="off" v-keyfilter="/^[^<>*!]+$/" v-model="operatorEmail"/>
+        <InputText id="operatorEmail" type="email" class="flex-auto" autocomplete="off" v-keyfilter="/^[^<>*!]+$/" v-model="operatorEmail" placeholder="email@example.com"/>
       </div>
 
       <div class="flex flex-col gap-1">
         <label for="operatorRole" class="font-semibold">Role</label>
         <Select id="operatorRole" v-model="operatorRole" :options="roles" :invalid="!operatorRole"
                 optionValue="ROLE_ID" optionLabel="ROLE_NAME" placeholder="Select a Role"
-                checkmark :highlightOnSelect="false" class="w-full" />
+                checkmark :highlightOnSelect="false" class="w-full"/>
       </div>
     </div>
 
